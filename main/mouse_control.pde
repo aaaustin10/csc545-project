@@ -1,0 +1,3 @@
+void move_mouse() {
+  ;
+}
