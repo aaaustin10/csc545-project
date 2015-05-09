@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;        
 import processing.video.*;
 int greenestX, greenestY, targetX, targetY, currentX, currentY, mouseDeltaX, mouseDeltaY;
 Robot robot;
@@ -88,3 +89,15 @@ void draw() {
   }
 }
 
+// This only works inside the environment, but
+// it's a decent proof of concept for how clicks
+// should be implemented. If this was how we were 
+// going to implement this, we would use a Java 
+// Key Listener event, and it would work even with
+// this program minimized.
+void keyPressed() {
+  if (key == ' ') {
+    robot.mousePress(InputEvent.BUTTON1_MASK);
+    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+  }
+}
