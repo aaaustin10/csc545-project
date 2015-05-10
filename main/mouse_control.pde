@@ -2,10 +2,10 @@ import java.awt.*;
 import processing.video.*;
 
 public class MouseController {
-  Robot robot;
-  color currentPixel, targetPixel;
-  short greenestX, greenestY, targetX, targetY, currentX, currentY, mouseDeltaX, mouseDeltaY;
-  
+  private Robot robot;
+  private color currentPixel, targetPixel;
+  private short greenestX, greenestY, targetX, targetY, currentX, currentY, mouseDeltaX, mouseDeltaY;
+
   // a higher value for PRECISION will make the mouse movement more precise and less jumpy,
   // but will also take longer for the mouse to approach its target
   private final short PRECISION = 7;
