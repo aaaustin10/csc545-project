@@ -1,4 +1,43 @@
+import gab.opencv.*;
+import processing.video.*;
 import java.awt.*;
+
+Capture video;
+OpenCV opencv;
+
+void setup() {
+  size(640, 480);
+  video = new Capture(this, 640, 480);
+  opencv = new OpenCV(this, 640, 480);
+  video.start();
+}
+
+void draw() {
+  opencv.loadImage(video);
+  opencv.threshold(140);
+  opencv.blur(1);
+  image(opencv.getOutput(), 0, 0);
+  ArrayList<Contour> contours = opencv.findContours(false, true);
+  noFill();
+  stroke(0, 255, 0);
+  strokeWeight(3);
+  for (int i = 0; i < contours.size() && i < 1; i++) {
+    Contour c = contours.get(i).getConvexHull();
+    c.draw();
+    contours.get(i).draw();
+    for (PVector p : c.getPoints()) {
+      stroke(255, 0, 0);
+      point(p.x, p.y);
+    }
+  }
+}
+
+void captureEvent(Capture c) {
+  c.read();
+}
+
+
+/*import java.awt.*;
 import java.awt.event.*;        
 import processing.video.*;
 int greenestX, greenestY, targetX, targetY, currentX, currentY, mouseDeltaX, mouseDeltaY;
@@ -100,4 +139,4 @@ void keyPressed() {
     robot.mousePress(InputEvent.BUTTON1_MASK);
     robot.mouseRelease(InputEvent.BUTTON1_MASK);
   }
-}
+}*/
