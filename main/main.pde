@@ -1,29 +1,40 @@
+// To download the OpenCV library, click Sketch (on the toolbar), then click Import Library.
+// From there, search for "OpenCV" and install it. The download might take a couple of minutes.
+
+import gab.opencv.*;
+import processing.video.*;
+import java.awt.*;
+
 Capture cam;
+HandDetector handDetector;
+OpenCV opencv;
 MouseController mouseController;
 
-final boolean DEBUG = false;
+final boolean DEBUG = true;
 
 void setup() {
   if (DEBUG) {
-    size(displayWidth, displayHeight);
+    size(640, 480);
   }
 
   cam = new Capture(this, 640, 480, 30);
+  opencv = new OpenCV(this, 640, 480);
   cam.start();
-  mouseController = new MouseController(cam);
+  handDetector = new HandDetector(cam, opencv);
+  mouseController = new MouseController();
 }
 
 void draw() {
   if (cam.available()) {
     cam.read();
-    mouseController.track();
+    mouseController.track(handDetector.detect());
 
-    if (DEBUG) {
+    /*if (DEBUG) {
       pushMatrix();
       scale(-1, 1);
       image(cam, -width, 0);
       popMatrix();
-    }
+    }*/
   }
 }
 
