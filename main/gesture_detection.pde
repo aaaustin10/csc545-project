@@ -2,15 +2,22 @@ public class HandDetector {
   private OpenCV opencv;
   private Capture cam;
 
+  public Rectangle[] faces;
+
   public HandDetector(Capture cam, OpenCV opencv) {
     this.cam = cam;
     this.opencv = opencv;
+    this.opencv.loadCascade(OpenCV.CASCADE_FRONTALFACE);
   }
 
   public Point detect() {
     opencv.loadImage(cam);
     opencv.threshold(140);
     opencv.blur(1);
+
+    faces = opencv.detect();
+    println(faces.length);
+
     image(opencv.getOutput(), 0, 0);
 
     ArrayList<Contour> contours = opencv.findContours(false, true);
