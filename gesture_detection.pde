@@ -56,7 +56,7 @@
       if ((averageDist > 1.25*runningAverage) & click) click = false;
       // change the color of the mouse dot in the camera display to blue when clicked
       if (click) stroke(0,0,255);
-      
+      averageDist = 0.0;
       
       point(averageX, averageY); // draw on screen
     }
