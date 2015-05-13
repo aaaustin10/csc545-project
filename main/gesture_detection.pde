@@ -24,13 +24,19 @@ class GestureDetector {
     int g = 0;
     int b = 0;
     int num_pix = 1;
+    
+    int min_x, max_x, min_y, max_y;
+    min_x = (int)rect.getX();
+    min_y = (int)rect.getY(); 
+    max_x = min_x + (int)rect.getWidth();
+    max_y = min_y + (int)rect.getHeight();
   
     final int bound = 5;
-    boolean[][] near_array = new boolean[img.width / bound + bound][img.height / bound + bound];
+    boolean[][] near_array = new boolean[img.width / bound + bound][img.height / bound + bound];  
   
     for (int x = 0; x < img.width; x++) {
       for (int y = 0; y < img.height; y++) {
-        if (rect.contains(x, y)) {
+        if (x >= min_x && x <= max_x && y >= min_y && y <= max_y) {
           if (near_array[x / bound][y / bound] || c.containsPoint(x, y)) {
             near_array[x / bound][y / bound] = true;
             color p = img.get(x, y);
@@ -55,7 +61,7 @@ class GestureDetector {
   } 
   
   PVector middle_of_blob = new PVector(200, 200);
-  color avg = color(128);
+  color avg = color(146.0, 120.0, 113.0);
   final int CENTER_TOO_FAR_AWAY = 50;
   final int TOO_SMALL_AREA = 1000;
   
