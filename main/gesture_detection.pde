@@ -61,7 +61,7 @@ class GestureDetector {
   
   PVector detect() {
     background(0);
-    PImage near_img = find_close_pixels(video, avg);
+    PImage near_img = find_close_pixels(cam, avg);
     image(near_img, 0, 0);
     opencv.loadImage(near_img);
     opencv.threshold(0); // if it appears at all
@@ -90,10 +90,11 @@ class GestureDetector {
     }
   
     if (chosen_contour != null) {
-      avg = find_blob_color(video, chosen_contour);
+      avg = find_blob_color(cam, chosen_contour);
       return middle_of_blob;
     } else {
       return null;
     }
   }
 }
+
