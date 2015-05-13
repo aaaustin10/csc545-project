@@ -29,10 +29,10 @@ void draw() {
     cam.read();
     mouseController.track(handDetector.detect());
 
-    stroke(0, 0, 255);
+    /*stroke(0, 0, 255);
     for (int i = 0; i < handDetector.faces.length; i++) {
       rect(handDetector.faces[i].x, handDetector.faces[i].y, handDetector.faces[i].width, handDetector.faces[i].height);
-    }
+    }*/
 
 
     /*if (DEBUG) {
