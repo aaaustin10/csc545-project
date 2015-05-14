@@ -6,6 +6,9 @@ class BlobDescription {
 }
 
 class GestureDetector {
+  
+  public color averageColor = color(72.0, 69.0, 89.0);
+  
   boolean color_dist(int c1, int c2, int threshold) {
     if (abs((c1 >> 16 & 0xFF) - (c2 >> 16 & 0xFF)) > threshold || abs((c1 >> 8 & 0xFF) - (c2 >> 8 & 0xFF)) > threshold || abs((c1 & 0xFF) - (c2 & 0xFF)) > threshold) {
       return false;
@@ -81,7 +84,7 @@ class GestureDetector {
       // replace this with beginning blob picker
       last_blob = new BlobDescription();
       last_blob.center = new PVector(200, 200);
-      last_blob.p = color(72.0, 69.0, 89.0);
+      last_blob.p = averageColor;
     }
 
     background(0);
