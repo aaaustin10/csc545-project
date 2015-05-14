@@ -14,6 +14,9 @@ class BlobDescription {
 class GestureDetector {
   
   public color averageColor = color(72.0, 69.0, 89.0);
+
+  float runningAreaAverage = 0.0;  // running average of area of blob
+  public boolean clicked = false;  // true when fist is made, false when flat palm
   
   boolean color_dist(int c1, int c2, int threshold) {
     if (abs((c1 >> 16 & 0xFF) - (c2 >> 16 & 0xFF)) > threshold || abs((c1 >> 8 & 0xFF) - (c2 >> 8 & 0xFF)) > threshold || abs((c1 & 0xFF) - (c2 & 0xFF)) > threshold) {
@@ -116,8 +119,23 @@ class GestureDetector {
       if (c.area() < TOO_SMALL_AREA) {
         break;
       }
+      
+      // assuming that the area stays fairly stable, this should detect a quick change in area
+      // when the hand goes from flat palm to fist and will see it as a click
+      runningAreaAverage = runningAreaAverage * 0.9 + c.area()*0.1; // psuedo running average of blob area;     
+      if (runningAreaAverage > TOO_SMALL_AREA) {
+        if ((c.area() < 0.75*runningAreaAverage) & !clicked) {
+          clicked = true;
+        }
+        if ((c.area() > 1.25*runningAreaAverage) & clicked) {
+          clicked = false;
+        }
+      } 
+      
+      
       for (PVector p : c.getPoints()) {
         stroke(255, 0, 0);
+        if (clicked) stroke(0,0,255);  // turns dot blue if clicked  
         point(p.x, p.y);
       }
     }
