@@ -19,7 +19,7 @@ void setup() {
 }
 
 void draw() {
-    mouseController.track(ges_det.detect());
+  mouseController.track(ges_det.detect());
 }
 
 void captureEvent(Capture c) {

@@ -1,15 +1,26 @@
+class BlobDescription {
+  PVector center;
+  float area;
+  color p;
+  Contour contour;
+}
+
 class GestureDetector {
-  float color_dist(int c1, int c2) {
-    return dist(red(c1), green(c1), blue(c1), red(c2), green(c2), blue(c2));
+  boolean color_dist(int c1, int c2, int threshold) {
+    if (abs(red(c1) - red(c2)) > threshold || abs(green(c1) - green(c2)) > threshold || abs(blue(c1) - blue(c2)) > threshold) {
+      return false;
+    } else {
+      return true;
+    }
   }
   
-  final int COLOR_DIST_TOO_FAR = 30;
+  final int COLOR_DIST_TOO_FAR = 10;
   PImage find_close_pixels(PImage img, color c) {  
     PImage target = img.get(0, 0, img.width, img.height); 
     for (int x = 0; x < img.width; x++) {
       for (int y = 0; y < img.height; y++) {
         color p = target.get(x, y);
-        if (color_dist(p, c) > COLOR_DIST_TOO_FAR) {
+        if (!color_dist(p, c, COLOR_DIST_TOO_FAR)) {
           target.set(x, y, color(0));
         }
       }
@@ -17,7 +28,8 @@ class GestureDetector {
     return target;
   }
   
-  color find_blob_color(PImage img, Contour c) {
+  color find_blob_color(PImage img, BlobDescription blob) {
+    Contour c = blob.contour;
     Rectangle rect = c.getBoundingBox();
   
     int r = 0;
@@ -60,30 +72,38 @@ class GestureDetector {
     return false;
   } 
   
-  PVector middle_of_blob = new PVector(200, 200);
-  color avg = color(146.0, 120.0, 113.0);
+  BlobDescription last_blob = null;
   final int CENTER_TOO_FAR_AWAY = 50;
   final int TOO_SMALL_AREA = 1000;
   
   PVector detect() {
+    if (last_blob == null) {
+      // replace this with beginning blob picker
+      last_blob = new BlobDescription();
+      last_blob.center = new PVector(200, 200);
+      last_blob.p = color(72.0, 69.0, 89.0);
+    }
+      
     background(0);
-    PImage near_img = find_close_pixels(cam, avg);
+    PImage near_img = find_close_pixels(cam, last_blob.p);
     image(near_img, 0, 0);
     opencv.loadImage(near_img);
     opencv.threshold(0); // if it appears at all
     ArrayList<Contour> contours = opencv.findContours(false, true);
+    
     noFill();
     stroke(0, 255, 0);
     strokeWeight(3);
-    Contour chosen_contour = null;
+    BlobDescription chosen_blob = null;
     for (int i = 0; i < contours.size(); i++) {
       Contour c = contours.get(i).getConvexHull();
       Rectangle rect = c.getBoundingBox();
       PVector center = new PVector((int)rect.getCenterX(), (int)rect.getCenterY());
-      if (dist(middle_of_blob.x, middle_of_blob.y, center.x, center.y) < CENTER_TOO_FAR_AWAY) {
-        middle_of_blob = center;
+      if (dist(last_blob.center.x, last_blob.center.y, center.x, center.y) < CENTER_TOO_FAR_AWAY) {
+        chosen_blob = new BlobDescription();
+        chosen_blob.center = center;
         c.draw();
-        chosen_contour = c;
+        chosen_blob.contour = c;
         break;
       }
       if (c.area() < TOO_SMALL_AREA) {
@@ -95,10 +115,15 @@ class GestureDetector {
       }
     }
   
-    if (chosen_contour != null) {
-      avg = find_blob_color(cam, chosen_contour);
-      return middle_of_blob;
+    if (chosen_blob != null) {
+      chosen_blob.p = find_blob_color(cam, chosen_blob);
+      last_blob = chosen_blob;
+      PVector center_copy = new PVector(chosen_blob.center.x, chosen_blob.center.y);
+      return center_copy;
     } else {
+      if (last_blob.contour != null) {
+        last_blob.contour.draw();
+      }
       return null;
     }
   }
