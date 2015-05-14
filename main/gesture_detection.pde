@@ -3,6 +3,12 @@ class BlobDescription {
   float area;
   color p;
   Contour contour;
+  
+  float how_close(BlobDescription other) {
+    float likelyhood = 0;
+    likelyhood += (this.area - other.area / ((this.area + other.area) / 2));
+    return likelyhood;
+  }
 }
 
 class GestureDetector {
@@ -16,7 +22,7 @@ class GestureDetector {
     return true;
   }
 
-  final int COLOR_DIST_TOO_FAR = 10;
+  final int COLOR_DIST_TOO_FAR = 15;
   PImage find_close_pixels(PImage img, color c) {  
     PImage target = img.get(0, 0, img.width, img.height); 
     for (int x = 0; x < img.width; ++x) {
