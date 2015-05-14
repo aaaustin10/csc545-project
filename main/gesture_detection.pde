@@ -130,12 +130,12 @@ class GestureDetector {
         if ((c.area() > 1.25*runningAreaAverage) & clicked) {
           clicked = false;
         }
+        println(clicked);
       } 
       
       
       for (PVector p : c.getPoints()) {
         stroke(255, 0, 0);
-        if (clicked) stroke(0,0,255);  // turns dot blue if clicked  
         point(p.x, p.y);
       }
     }
