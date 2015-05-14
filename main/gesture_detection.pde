@@ -145,6 +145,9 @@ class GestureDetector {
       last_blob = chosen_blob;
       return new PVector(chosen_blob.center.x, chosen_blob.center.y); // center_copy
     } else if (last_blob.contour != null) {
+        noFill();
+        stroke(0, 0, 255);
+        strokeWeight(3);
         last_blob.contour.draw();
     }
     return null;
