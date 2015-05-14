@@ -19,7 +19,7 @@ void setup() {
 
 void draw() {
   if (!gotAverage && cam.available()) {
-    println("Please keep your hand in the middle of the screen...");
+    println("Calibrating: Please keep your hand in the middle of the screen...");
     color average = getAverageColor();
     ges_det.averageColor = average;
     println("Good to go! Color is: ", red(average), green(average), blue(average));

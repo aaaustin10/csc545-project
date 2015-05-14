@@ -62,10 +62,8 @@ class GestureDetector {
         }
       }
     }
-    r /= num_pix;
-    g /= num_pix;
-    b /= num_pix;
-    return color(r, g, b);
+
+    return color(r /= num_pix, g /= num_pix, b /= num_pix);
   }
 
   boolean almost(float base, float other, float percentage) {
@@ -121,8 +119,7 @@ class GestureDetector {
     if (chosen_blob != null) {
       chosen_blob.p = find_blob_color(cam, chosen_blob);
       last_blob = chosen_blob;
-      PVector center_copy = new PVector(chosen_blob.center.x, chosen_blob.center.y);
-      return center_copy;
+      return new PVector(chosen_blob.center.x, chosen_blob.center.y); // center_copy
     } else if (last_blob.contour != null) {
         last_blob.contour.draw();
     }
