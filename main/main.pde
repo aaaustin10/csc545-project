@@ -1,8 +1,6 @@
 import gab.opencv.*;
 import processing.video.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import org.opencv.imgproc.Imgproc;
 
 Capture cam;
 OpenCV opencv;
@@ -36,7 +34,7 @@ void captureEvent(Capture c) {
 color getAverageColor() {
   int r = 0, g = 0, b = 0;
   int counter = 0;
-  for (int y = cam.height / 3; y < 2 * cam.height / 3 ; ++y) {
+  for (int y = cam.height / 3; y < 2 * cam.height / 3; ++y) {
     for (int x = cam.width / 3; x < 2 * cam.width / 3; ++x) {
       r += cam.get(x, y) >> 16 & 0xFF;
       g += cam.get(x, y) >> 8 & 0xFF;
@@ -44,7 +42,8 @@ color getAverageColor() {
       ++counter;
     }
   }
-  
+
   gotAverage = true;
   return color(r / counter, g / counter, b / counter);
 }
+
